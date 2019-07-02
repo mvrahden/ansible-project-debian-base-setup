@@ -1,0 +1,31 @@
+- name: apt-get update
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+    cache_valid_time: 86400
+    force_apt_get: yes
+  become: true
+
+- name: apt-get upgrade
+  apt:
+    upgrade: full
+    autoclean: yes
+    autoremove: yes
+    force_apt_get: yes
+  become: true
+
+- name: apt-get dist-upgrade
+  apt:
+    upgrade: dist
+    autoclean: yes
+    autoremove: yes
+    force_apt_get: yes
+  become: true
+
+- name: apt-get install man
+  apt:
+    name: [ 'man' ]
+    state: present
+    force: yes
+  become: true

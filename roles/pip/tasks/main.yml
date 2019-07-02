@@ -1,0 +1,20 @@
+---
+- name: Install python and pip
+  apt:
+    name: "{{ python_packages }}"
+    state: present
+    force: yes
+  become: true
+
+# If Docker-compose fails in 'aarch64'
+# This should help
+# see: https://github.com/confluentinc/confluent-kafka-python/issues/462
+- name: Install dependencies for pip build processes
+  apt:
+    name: "{{ build_packages }}"
+    state: present
+    force: yes
+  become: true
+
+- name: Install virtualenv and setuptools
+  shell: pip install virtualenv setuptools

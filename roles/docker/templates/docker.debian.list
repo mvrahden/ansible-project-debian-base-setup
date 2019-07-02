@@ -1,0 +1,1 @@
+deb [arch={{ target_node_arch }}] https://download.docker.com/linux/debian {{ os_codename }} stable edge

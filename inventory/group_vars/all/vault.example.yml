@@ -1,0 +1,15 @@
+###
+#   This is an vault file with exemplary values
+###
+
+vault_ssh_public_keys:
+  - ssh-rsa <-- one key --> the.host@domain
+  - ssh-rsa <-- two key --> the.other.host@domain
+
+###
+#   To secure the content of a vault file create ./ansible.key and fill it with a secret phrase.
+#   To then de-/encrypt use:
+#
+#    `ansible-vault encrypt inventory/group_vars/all/vault.yml`
+#
+###

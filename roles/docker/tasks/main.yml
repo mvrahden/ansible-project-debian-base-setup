@@ -1,0 +1,86 @@
+---
+- name: Determine if docker is installed
+  stat:
+    path: /usr/bin/docker
+  register: _docker_binary
+  ignore_errors: true
+
+- name: Determine docker version
+  command: "/usr/bin/docker --version"
+  when: _docker_binary['stat']['exists']
+  register: docker_version
+  ignore_errors: true
+
+- name: Determine if docker-compose is installed
+  shell: docker-compose version
+  register: _docker_compose_binary
+  ignore_errors: true
+
+- name: Get pre-requisites for docker
+  apt:
+    name: "{{ pre_requisites }}"
+    state: present
+    force: yes
+    force_apt_get: yes
+  when: not _docker_binary['stat']['exists']
+
+- name: Add docker ({{ os_distro }}) repository key to apt
+  shell: curl -fsSL https://download.docker.com/linux/{{ os_distro }}/gpg | apt-key add -
+  when: not _docker_binary['stat']['exists']
+
+- name: Add Docker ({{ os_distro }}) to available apt sources
+  template:
+    src: docker.list
+    # ansible_facts['os_family'] & ['distribution'] return 'Debian' instead of the needed 'Raspbian' and 'Ubuntu'
+    dest: /etc/apt/sources.list.d/docker.list
+    owner: root
+    group: root
+    mode: 0644
+  when: not _docker_binary['stat']['exists']
+
+- name: apt-get update
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+    force_apt_get: yes
+  when: not _docker_binary['stat']['exists']
+  
+- name: Install docker {{ docker.package_name }}
+  apt:
+    name: "{{ docker.package_name }}"
+    force_apt_get: yes
+  when: not _docker_binary['stat']['exists']
+
+- name: Restart Docker daemon
+  shell: systemctl start docker
+  when: not _docker_binary['stat']['exists']
+
+- name: Add docker usergroup
+  shell: usermod -aG docker {{ ansible_user }}
+  when: not _docker_binary['stat']['exists']
+
+# - name: Install docker-compose
+#   pip:
+#     name: docker-compose
+#     state: latest
+#   become: true
+#   when: not ( _docker_compose_binary.stdout_lines | length > 0 )
+
+- name: Reboot
+  shell: sleep 5 && reboot
+  async: 1
+  poll: 0
+  when: |
+    not _docker_binary['stat']['exists']
+    or not (_docker_compose_binary['stdout'] | length > 0)
+
+- name: Wait for Reboot
+  wait_for_connection:
+    connect_timeout: 20
+    sleep: 5
+    delay: 5
+    timeout: 180
+  when: |
+    not _docker_binary['stat']['exists']
+    or not (_docker_compose_binary['stdout'] | length > 0)

@@ -1,0 +1,34 @@
+- name: Install python before doing any other steps
+  hosts: all
+  become: yes
+  gather_facts: no
+  pre_tasks:
+    - name: 'install python2'
+      raw: sudo apt-get -y update && sudo apt-get -y install python
+
+##### keep these plays separated because of fact gathering #####
+
+- name: Setup all hosts with the following roles
+  hosts: all
+  pre_tasks:
+    - name: Debug ansible_facts
+      debug:
+        var: ansible_facts
+    - name: Output general OS details of hosts
+      debug:
+        msg: "{{ ansible_host }}\t\tOS: {{ os_family }} – {{ os_distro }} – {{ os_codename }}\t\tArch: {{ target_node_arch }}"
+  post_tasks:
+    - name: Remove dependencies that are no longer required
+      apt:
+        autoclean: yes
+        autoremove: yes
+  roles:
+    - prerequisites
+    - pip
+    - hostname
+    - ssh
+      # hardening points: https://dev-sec.io/baselines/ssh/
+      # also see: https://galaxy.ansible.com/dev-sec/ssh-hardening
+    - interfaces_switch_off
+    - swapfile # homogenizes the usage of swap memory, by making use of swapfiles, instead of swap mounts
+    - docker

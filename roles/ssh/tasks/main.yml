@@ -1,0 +1,23 @@
+---
+- name: Copy ssh public keys
+  template:
+    src: authorized_keys
+    dest: /home/{{ ansible_user }}/.ssh/authorized_keys
+    owner: root
+    group: root
+    mode: 0755
+
+- name: "[etc/ssh/sshd_config] Deactivate PermitRootLogin"
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: "#PermitRootLogin prohibit-password"
+    replace: "PermitRootLogin no"
+
+- name: "[etc/ssh/sshd_config] Deactivate PasswordAuthentication"
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: "#PasswordAuthentication yes"
+    replace: "PasswordAuthentication no"
+
+- name: Restart sshd service
+  shell: service ssh restart

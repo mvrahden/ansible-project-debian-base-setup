@@ -1,0 +1,78 @@
+---
+# This tasks are assuming that if dphys-swapfile exists, that:
+#  - static swap-devices are not used (in favor of a dynamically sized swapfile system provided by dphys-swapfile)
+# Else:
+#  - swapon / swapoff are being used for management of static swap mounts
+# Some infos found under: https://debian-administration.org/article/550/Creating_dynamic_swap_space
+
+- name: Determine if dphys-swapfile is installed
+  stat: 
+    path: /sbin/dphys-swapfile
+  register: _uses_swapfile
+  ignore_errors: true
+
+- debug:
+    var: _uses_swapfile
+
+- name: Switch off all swaps
+  shell: swapoff -a
+
+- name: Identify mounting points of swap devices
+  shell: blkid | grep swap
+  # alternatives:
+  # -> sudo blkid | grep swap
+  # -> swapon --show | grep /dev/
+  become: true
+  register: mount_points
+  ignore_errors: true
+  when: not _uses_swapfile['stat']['exists']
+
+- name: Debug mount_points
+  debug:
+    var: mount_points
+  when: not _uses_swapfile['stat']['exists']
+
+- name: Set Fact swap_mounts
+  set_fact:
+    swap_mounts: "{{ mount_points.stdout_lines | map('regex_findall', '/dev/[a-zA-Z0-9]*') | map('join') | list }}"
+    # regex '/dev/[a-zA-Z0-9]*' searches anything starting with /dev/ and include multiple (*) of these [a-zA-Z0-9] characters
+    # until a character is hit, that doesn't match with [a-zA-Z0-9], e.g. a whitespace
+    # see: https://automation.ipspace.net/Example:Parsing_Text_Printouts_within_Ansible_Playbooks
+  when: not _uses_swapfile['stat']['exists']
+
+- name: Debug swap_mounts
+  debug:
+    var: swap_mounts
+  when: not _uses_swapfile['stat']['exists']
+
+- name: Remove identified mounting points of swap devices
+  shell: umount {{ item }}
+  loop: "{{ swap_mounts }}"
+  ignore_errors: true
+  when: not _uses_swapfile['stat']['exists']
+
+- name: List swap space and mount points
+  shell: free -mh && swapon --show
+  when: not _uses_swapfile['stat']['exists']
+
+- name: Check if file /etc/init/zram-config.conf exists
+  stat:
+    path: /etc/init/zram-config.conf
+  register: _zram_conf
+  ignore_errors: true
+
+- name: Uninstall zram-conf
+  apt:
+    name: zram-conf
+    state: absent
+    purge: yes
+    autoremove: yes
+    force_apt_get: yes
+  when: _zram_conf['stat']['exists']
+
+- name: Install dphys-swapfile
+  apt:
+    name: dphys-swapfile
+    state: present
+    force_apt_get: yes
+  when: not _uses_swapfile['stat']['exists']
