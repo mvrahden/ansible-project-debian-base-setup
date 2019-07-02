@@ -1,0 +1,8 @@
+roles/mvrahden
+.log/*
+.cache/*
+.cp/*
+out/*
+dist/*
+**/*/vault.yml
+.vault.key
