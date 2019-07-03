@@ -1,18 +1,17 @@
 ---
 - name: Ensure hostname set
   hostname:
-    name: "{{ ansible_hostname }}"
-  when: not ansible_hostname is match('(\d{1,3}\.){3}\d{1,3}')
+    name: "{{ inventory_hostname }}"
+  when: |
+    not inventory_hostname is match('(\d{1,3}\.){3}\d{1,3}')
+    and not inventory_hostname == ansible_hostname
   register: _hostname
-
-- debug:
-    var: hostvars
 
 - name: Ensure hostname is in /etc/hosts
   lineinfile:
     dest: /etc/hosts
     regexp: "^{{ ansible_host }}.+$"
-    line: "{{ ansible_host }} {{ ansible_fqdn }} {{ ansible_hostname }}"
+    line: "{{ ansible_host }} {{ inventory_hostname }} {{ inventory_hostname_short }}"
   register: _hostsfile
 
 - name: Reboot
