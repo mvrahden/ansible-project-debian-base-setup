@@ -29,9 +29,14 @@
   when: not _docker_binary['stat']['exists']
 
 - name: Add Docker ({{ os_distro }}) to available apt sources
+  vars:
+    # take care of armhf mapping in here for Raspberry Pi architectures.
+    _node_arch: "{{ 'armhf' if (target_node_arch == 'arm') else target_node_arch }}"
+    _node_os_distro: "{{ os_distro }}"
+    # take care of os release/codename for raspbian; buster releases for docker doesn't exist yet >> fall back to 'stretch'
+    _node_os_codename: "{{ 'stretch' if (os_codename == 'buster' and os_distro == 'raspbian') else os_codename }}"
   template:
     src: docker.list
-    # ansible_facts['os_family'] & ['distribution'] return 'Debian' instead of the needed 'Raspbian' and 'Ubuntu'
     dest: /etc/apt/sources.list.d/docker.list
     owner: root
     group: root

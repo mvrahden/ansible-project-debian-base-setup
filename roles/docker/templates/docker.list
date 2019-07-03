@@ -1,1 +1,1 @@
-deb [arch={{ target_node_arch }}] https://download.docker.com/linux/{{ os_distro }} {{ os_codename }} stable edge
+deb [arch={{ _node_arch }}] https://download.docker.com/linux/{{ _node_os_distro }} {{ _node_os_codename }} stable edge
