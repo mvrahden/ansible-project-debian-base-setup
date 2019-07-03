@@ -1,3 +1,0 @@
-os_family: "{{ ansible_os_family | lower }}"                    # e.g. debian | debian | debian
-os_distro: "{{ ansible_facts['lsb']['id'] | lower }}"           # e.g. debian | raspbian | ubuntu
-os_codename: "{{ ansible_facts['lsb']['codename'] | lower }}"   # e.g. stretch | stretch | bionic
