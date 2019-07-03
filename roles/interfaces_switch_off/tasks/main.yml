@@ -6,7 +6,7 @@
   ignore_errors: true
 
 - debug:
-    var: _uses_tvservice
+    var: _uses_tvservice['stat']
 
 - name: Switch off HDMI
   shell: /opt/vc/bin/tvservice -o

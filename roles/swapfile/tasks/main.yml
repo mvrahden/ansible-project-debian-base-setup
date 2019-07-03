@@ -12,7 +12,7 @@
   ignore_errors: true
 
 - debug:
-    var: _uses_swapfile
+    var: _uses_swapfile['stat']
 
 - name: Switch off all swaps
   shell: swapoff -a
