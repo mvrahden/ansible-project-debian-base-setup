@@ -11,20 +11,4 @@ docker:
     # arm64, amd64, armhf, ppc64el
     # tag: 5:18.09.4~3-0~raspbian-stretch
 
-arch_mapping:
-  # Kubernetes Architectures: amd64 | arm64 | arm | ppc64le | s390x
-  # see: https://packages.cloud.google.com/apt/dists/kubernetes-xenial/Release
-  # Ansible Architectures
-  # see: https://github.com/ansible/ansible/blob/d2dc4c9bc43aae4e1b46098ac1e006fa3dda00ae/lib/ansible/modules/packaging/os/dnf.py#L374
-  amd64: "amd64"
-  x86_64: "amd64"
-  armv7l: "arm"     # Raspberry Pi 3 B+  # sometimes also referred to as armhf; will be mapped case-by-case
-  aarch64: "arm64"  # Rock64
-  ppc64le: "ppc64le"
-  s390x: "s390x"
-
-target_node_arch: "{{ arch_mapping[ ansible_facts['architecture'] ] }}"
-target_nodes_ansible_archs: "{{ groups['all'] | map('extract', hostvars, ['ansible_facts', 'architecture'] ) | list | unique }}"
-target_all_possible_archs: "{{ kube_nodes_ansible_archs | map('extract', arch_mapping ) | list | unique }}"
-
 ssh_public_keys: "{{ vault_ssh_public_keys }}"  # list of keys (see ~/.ssh/authorized_keys)

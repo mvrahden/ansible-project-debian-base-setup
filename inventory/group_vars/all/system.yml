@@ -1,0 +1,38 @@
+---
+os_family: "{{ ansible_os_family | lower }}"                    # e.g. debian | debian | debian
+os_distro: "{{ ansible_facts['lsb']['id'] | lower }}"           # e.g. debian | raspbian | ubuntu
+os_codename: "{{ ansible_facts['lsb']['codename'] | lower }}"   # e.g. stretch | stretch | bionic
+
+arch_mapping:
+  amd64: "amd64"
+  x86_64: "amd64"
+  armv7l: "arm"     # Raspberry Pi 3 B+  # sometimes also referred to as armhf; will be mapped case-by-case
+  aarch64: "arm64"  # Rock64
+  ppc64le: "ppc64le"
+  s390x: "s390x"
+
+target_node_arch: "{{ arch_mapping[ ansible_facts['architecture'] ] }}"
+target_nodes_ansible_archs: "{{ groups['all'] | map('extract', hostvars, ['ansible_facts', 'architecture'] ) | list | unique }}"
+target_all_possible_archs: "{{ kube_nodes_ansible_archs | map('extract', arch_mapping ) | list | unique }}"
+
+### potentially useful facts ###
+#  with sample output from Raspberry Pi 3 B+
+
+# ansible_facts['nodename']: "raspberrypi"
+# ansible_facts['os_family']: "Debian"
+# ansible_facts['distribution']: "Debian"
+# ansible_facts['distribution_file_parsed']: "true"
+# ansible_facts['distribution_file_path']: "/etc/os-release"
+# ansible_facts['distribution_file_variety']: "Debian"
+# ansible_facts['distribution_version']: "10"
+# ansible_facts['distribution_major_version']: "10"
+# ansible_facts['distribution_release']: "buster"
+# ansible_facts['kernel']: "4.19.50-v7+"
+# ansible_facts['lsb']['codename']: "buster"
+# ansible_facts['lsb']['description']: "Raspbian GNU/Linux 10 (buster)"
+# ansible_facts['lsb']['id']: "Raspbian GNU/Linux 10 (buster)"
+# ansible_facts['lsb']['major_release']: "10"
+# ansible_facts['lsb']['release']: "10"
+# ansible_facts['architecture']: "armv7l"
+# ansible_facts['machine']: "armv7l"
+# ansible_facts['processor']: [ "0", "ARMv7 Processor rev 4 (v7l)", "1", "ARMv7 Processor rev 4 (v7l)", "2", "ARMv7 Processor rev 4 (v7l)", "3", "ARMv7 Processor rev 4 (v7l)" ]
