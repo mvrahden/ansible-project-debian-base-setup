@@ -15,6 +15,16 @@
     line: "{{ ansible_host }} {{ ansible_fqdn }} {{ ansible_hostname }}"
   register: _hostsfile
 
-- name:
-  notify:
-    - Reboot
+- name: Reboot
+  shell: sleep 5 && reboot
+  async: 1
+  poll: 0
+  when: _hostname['changed'] or _hostsfile['changed']
+
+- name: Wait for Reboot
+  wait_for_connection:
+    connect_timeout: 20
+    sleep: 5
+    delay: 5
+    timeout: 180
+  when: _hostname['changed'] or _hostsfile['changed']
