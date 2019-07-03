@@ -58,7 +58,7 @@
   when: not _docker_binary['stat']['exists']
 
 - name: Restart Docker daemon
-  shell: systemctl start docker
+  shell: systemctl restart docker
   when: not _docker_binary['stat']['exists']
 
 - name: Add docker usergroup
