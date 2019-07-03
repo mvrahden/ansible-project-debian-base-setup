@@ -35,3 +35,11 @@ ansible-playbook playbooks/provisioning.yml -k
 
 After executing this command, you'll be prompted for your **ssh passphrase** and the process beginns.
 For issues with the connection, please consult a online search engine of your choice.
+
+## License
+
+MIT
+
+## Author Information
+
+- Menno van Rahden
