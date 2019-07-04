@@ -22,7 +22,7 @@ To achieve that, please execute from your local control machine for every host i
 
 - `ssh-copy-id pi@{IP-ADDRESS, e.g. 192.168.1.150}` and verify with the default password e.g. `raspberry` or `rock64`
 
-Make sure to repeat this process for **every** every machine.
+Make sure to repeat this process for **every** machine.
 After this process is done, have a look at `inventory/hosts.ini`-file and verify the entries.
 
 After this step, the remote machines are ready to be provisioned by Ansible.
@@ -34,7 +34,13 @@ ansible-playbook playbooks/provisioning.yml -k
 ```
 
 After executing this command, you'll be prompted for your **ssh passphrase** and the process beginns.
-For issues with the connection, please consult a online search engine of your choice.
+For issues with Ansible or the connection, please consult an online search engine of your choice.
+
+## OS Versions tested
+
+- Raspbian Lite
+  - Stretch | Nov 2019
+  - Buster | Jun 2019
 
 ## License
 
