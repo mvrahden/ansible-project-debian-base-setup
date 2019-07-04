@@ -10,6 +10,9 @@ This provisioning helps bringing the remote debian machines (e.g. Raspberry Pis 
 
 ### Operating Systems
 
+The following is just an exemplary list.
+Feel free to try your own **debian-based** system.
+
 - Ubuntu Server (http://cdimage.ubuntu.com/releases/) or Debian (https://www.debian.org/releases/stable/)
 - Debain (Ayufan Rock64 Build) for Rock64 (https://github.com/ayufan-rock64/linux-build/ or http://wiki.pine64.org/index.php/ROCK64_Main_Page)
 - Raspbian Lite for Raspberry Pis
@@ -37,6 +40,9 @@ After executing this command, you'll be prompted for your **ssh passphrase** and
 For issues with Ansible or the connection, please consult an online search engine of your choice.
 
 ## OS Versions tested
+
+This is a list of OS Versions that have been tested.
+Feel free to add other Versions after successful runs.
 
 - Raspbian Lite
   - Stretch | Nov 2019
