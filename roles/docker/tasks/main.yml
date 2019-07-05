@@ -65,18 +65,18 @@
   debug:
     msg: "{{ ('Sub-process /usr/bin/dpkg returned an error code' in _docker_install_status['stderr'] and 'dpkg: error processing package aufs-dkms (--configure)' in _docker_install_status['stdout'])}}"
   register: _aufs_dkms_postprocess_error
-  when: |
+  when: >
     _docker_install_status['stderr'] is defined
     and _docker_install_status['stderr'] != ""
 
 - name: Fix failed aufs-dkms install (Workaround for aufs-dkms post-processing error)
-  shell: |
+  shell: >
     sudo rm /var/lib/dpkg/info/aufs-dkms.postinst; \
     sudo rm /var/lib/dpkg/info/aufs-dkms.prerm; \
     sudo dpkg --configure aufs-dkms; \
     sudo dpkg --configure docker-ce
   ignore_errors: true # this reconfiguration of docker-ce may provoke errors. But it's totally fine then...
-  when: |
+  when: >
     _aufs_dkms_postprocess_error['msg'] is defined
     and _aufs_dkms_postprocess_error['msg'] == true
 
@@ -99,7 +99,7 @@
   shell: sleep 5 && reboot
   async: 1
   poll: 0
-  when: |
+  when: >
     not _docker_binary['stat']['exists']
     or not (_docker_compose_binary['stdout'] | length > 0)
 
@@ -109,6 +109,6 @@
     sleep: 5
     delay: 5
     timeout: 180
-  when: |
+  when: >
     not _docker_binary['stat']['exists']
     or not (_docker_compose_binary['stdout'] | length > 0)
