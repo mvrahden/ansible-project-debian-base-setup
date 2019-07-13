@@ -1,5 +1,5 @@
 - name: Install python before doing any other steps
-  hosts: all
+  hosts: targets
   become: yes
   gather_facts: no
   pre_tasks:
@@ -9,7 +9,7 @@
 ##### keep these plays separated because of fact gathering #####
 
 - name: Setup all hosts with the following roles
-  hosts: all
+  hosts: targets
   pre_tasks:
     - name: Output general host and OS details
       debug:
