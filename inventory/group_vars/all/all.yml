@@ -1,14 +1,2 @@
 ---
-docker:
-  package_name: docker-ce # debian | ubuntu | raspbian
-  # https://download.docker.com/linux/ubuntu/dists/bionic/stable/binary-armhf/Packages
-    # arm64, amd64, armhf, ppc64el, s390x
-    # tag: 5:18.09.4~3-0~ubuntu-bionic
-  # https://download.docker.com/linux/debian/dists/stretch/stable/binary-armhf/Packages
-    # arm64, amd64, armhf, ppc64el
-    # tag: 5:18.09.4~3-0~debian-stretch
-  # https://download.docker.com/linux/raspbian/dists/stretch/stable/binary-armhf/Packages
-    # arm64, amd64, armhf, ppc64el
-    # tag: 5:18.09.4~3-0~raspbian-stretch
-
 ssh_public_keys: "{{ vault_ssh_public_keys }}"  # list of keys (see ~/.ssh/authorized_keys)

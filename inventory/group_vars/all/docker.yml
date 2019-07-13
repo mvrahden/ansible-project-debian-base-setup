@@ -1,1 +1,0 @@
-pre_requisites: [ 'apt-transport-https', 'ca-certificates', 'curl', 'gnupg', 'gpgv' ]
