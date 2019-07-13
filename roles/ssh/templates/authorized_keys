@@ -1,3 +1,4 @@
+{{ ansible_managed | comment }}
 {% for key in ssh_public_keys %}
 {{ key }}
 {% endfor %}
