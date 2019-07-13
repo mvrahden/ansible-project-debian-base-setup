@@ -9,6 +9,8 @@
   command: "/usr/bin/docker --version"
   when: _docker_binary['stat']['exists']
   register: _docker_version
+  changed_when: >
+    'Docker version' not in _docker_version['stdout']
   ignore_errors: true
 
 # - name: Determine if docker-compose is installed
