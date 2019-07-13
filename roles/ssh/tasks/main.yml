@@ -6,18 +6,28 @@
     owner: root
     group: root
     mode: 0755
+  register: _ssh_keys
 
 - name: "[etc/ssh/sshd_config] Deactivate PermitRootLogin"
   replace:
     path: /etc/ssh/sshd_config
     regexp: "#PermitRootLogin prohibit-password"
     replace: "PermitRootLogin no"
+  register: _ssh_permit_rootlogin
 
 - name: "[etc/ssh/sshd_config] Deactivate PasswordAuthentication"
   replace:
     path: /etc/ssh/sshd_config
     regexp: "#PasswordAuthentication yes"
     replace: "PasswordAuthentication no"
+  register: _ssh_pw_auth
 
 - name: Restart sshd service
-  shell: service ssh restart
+  service:
+    name: ssh
+    state: restarted
+  when: >
+    _ssh_keys['changed']
+    or _ssh_permit_rootlogin['changed']
+    or _ssh_pw_auth['changed']
+  
