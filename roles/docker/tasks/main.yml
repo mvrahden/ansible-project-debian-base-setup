@@ -8,7 +8,7 @@
 - name: Determine docker version
   command: "/usr/bin/docker --version"
   when: _docker_binary['stat']['exists']
-  register: docker_version
+  register: _docker_version
   ignore_errors: true
 
 - name: Determine if docker-compose is installed
@@ -18,7 +18,7 @@
 
 - name: Get pre-requisites for docker
   apt:
-    name: "{{ pre_requisites }}"
+    name: "{{ docker_pre_requisites }}"
     state: present
     force: yes
     force_apt_get: yes
@@ -51,9 +51,9 @@
     force_apt_get: yes
   when: not _docker_binary['stat']['exists']
   
-- name: Install docker {{ docker.package_name }}
+- name: Install docker {{ docker_package_name }}
   apt:
-    name: "{{ docker.package_name }}"
+    name: "{{ docker_package_name }}"
     state: present
     force_apt_get: yes
   become: true

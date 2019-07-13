@@ -1,7 +1,7 @@
 ---
 - name: Install python and pip
   apt:
-    name: "{{ python_packages }}"
+    name: "{{ pip_python_packages }}"
     state: present
     force: yes
   become: true
@@ -11,7 +11,7 @@
 # see: https://github.com/confluentinc/confluent-kafka-python/issues/462
 - name: Install dependencies for pip build processes
   apt:
-    name: "{{ build_packages }}"
+    name: "{{ pip_build_packages }}"
     state: present
     force: yes
   become: true
