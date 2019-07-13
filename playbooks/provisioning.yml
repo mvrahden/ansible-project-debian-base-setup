@@ -5,6 +5,9 @@
   pre_tasks:
     - name: 'install python2'
       raw: sudo apt-get -y update && sudo apt-get -y install python
+      register: install_python
+      changed_when: >
+        not 'python is already the newest version' in install_python['stdout']
 
 ##### keep these plays separated because of fact gathering #####
 
