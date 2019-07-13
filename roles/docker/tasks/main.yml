@@ -11,10 +11,10 @@
   register: _docker_version
   ignore_errors: true
 
-- name: Determine if docker-compose is installed
-  shell: docker-compose version
-  register: _docker_compose_binary
-  ignore_errors: true
+# - name: Determine if docker-compose is installed
+#   shell: docker-compose version
+#   register: _docker_compose_binary
+#   ignore_errors: true
 
 - name: Get pre-requisites for docker
   apt:
