@@ -12,7 +12,7 @@
   ignore_errors: true
 
 - debug:
-    var: _uses_swapfile['stat']
+    msg: "Swapfile exists: {{ _uses_swapfile['stat']['exists'] }}"
 
 - name: Switch off all swaps
   shell: swapoff -a
