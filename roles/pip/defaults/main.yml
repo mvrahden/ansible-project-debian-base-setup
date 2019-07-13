@@ -1,0 +1,3 @@
+---
+pip_python_packages: [ 'python-pip', 'python-dev' ]
+pip_build_packages: [ 'libssl-dev', 'libffi-dev', 'zlib1g-dev', 'gcc', 'g++', 'make' ]
