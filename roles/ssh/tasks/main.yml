@@ -30,4 +30,3 @@
     _ssh_keys['changed']
     or _ssh_permit_rootlogin['changed']
     or _ssh_pw_auth['changed']
-  
