@@ -1,7 +1,7 @@
 ---
 - name: Copy ssh public keys
   template:
-    src: authorized_keys
+    src: authorized_keys.j2
     dest: /home/{{ ansible_user }}/.ssh/authorized_keys
     owner: root
     group: root

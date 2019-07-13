@@ -15,7 +15,7 @@
 
 - name: Load config.txt for Raspberry Pis
   template:
-    src: config.txt
+    src: config.txt.j2
     dest: /boot/config.txt
   become: true
   when: os_distro == 'raspbian'

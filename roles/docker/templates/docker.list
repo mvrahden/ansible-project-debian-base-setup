@@ -1,1 +1,0 @@
-deb [arch={{ _node_arch }}] https://download.docker.com/linux/{{ _node_os_distro }} {{ _node_os_codename }} stable edge
