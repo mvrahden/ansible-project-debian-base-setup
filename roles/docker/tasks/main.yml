@@ -101,7 +101,6 @@
   poll: 0
   when: >
     not _docker_binary['stat']['exists']
-    or not (_docker_compose_binary['stdout'] | length > 0)
 
 - name: Wait for Reboot
   wait_for_connection:
@@ -111,4 +110,3 @@
     timeout: 180
   when: >
     not _docker_binary['stat']['exists']
-    or not (_docker_compose_binary['stdout'] | length > 0)
