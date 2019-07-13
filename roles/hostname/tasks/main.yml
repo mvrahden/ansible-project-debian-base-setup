@@ -7,11 +7,12 @@
     and not inventory_hostname == ansible_hostname
   register: _hostname
 
-- name: Ensure hostname is in /etc/hosts
-  lineinfile:
+- name: Ensure all devices are listed in /etc/hosts
+  template:
+    src: hosts.j2
     dest: /etc/hosts
-    regexp: "^{{ ansible_host }}.+$"
-    line: "{{ ansible_host }} {{ inventory_hostname }} {{ inventory_hostname_short }}"
+    mode: 0644
+    backup: true
   register: _hostsfile
 
 - name: Reboot
