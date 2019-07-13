@@ -1,11 +1,6 @@
 ---
-# These tasks assume that
-# if dphys-swapfile exists
-#   static swap-devices are **not** being used
-#   (in favor of a dynamically sized swapfile
-#    system provided by dphys-swapfile)
-# else:
-#   swapon / swapoff are being used for management of static swap mounts
+# The following tasks will favor a dynamic swapfile (dphys-swapfile)
+# over statically mounted and sized swap devices (via e.g. zram).
 # Some infos found under: https://debian-administration.org/article/550/Creating_dynamic_swap_space
 
 - name: Determine if dphys-swapfile is installed
