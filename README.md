@@ -68,7 +68,7 @@ Feel free to add other Versions after successful runs.
   - Stretch | Nov 2019
   - Buster | Jun 2019
 - Debian (Rock64 – Ayufan Builds)
-  - Stretch minimal | 0.7.9
+  - Stretch minimal | 0.7.9 | 0.8.3
 
 ## License
 
