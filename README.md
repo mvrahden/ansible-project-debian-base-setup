@@ -10,12 +10,16 @@ This provisioning helps bringing the remote debian machines (e.g. Raspberry Pis 
 
 ### Operating Systems
 
-The following is just an exemplary list.
-Feel free to try your own **debian-based** system.
+The following list is just an exemplary collection of debian-based operating systems that have been [tested with this playbook](#os-versions-tested).
 
 - Ubuntu Server (http://cdimage.ubuntu.com/releases/) or Debian (https://www.debian.org/releases/stable/)
 - Debain (Ayufan Rock64 Build) for Rock64 (https://github.com/ayufan-rock64/linux-build/ or http://wiki.pine64.org/index.php/ROCK64_Main_Page)
 - Raspbian Lite for Raspberry Pis
+
+Feel free to try other **debian-based** systems – in principle nothing can go wrong, as long as you try it on a device that:
+
+- has no sensible data and
+- is physically accessible to you.
 
 ### SSH
 
