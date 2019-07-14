@@ -1,0 +1,7 @@
+---
+- src: mvrahden.ssh
+  name: mvrahden/ssh
+- src: mvrahden.swapfile
+  name: mvrahden/swapfile
+- src: mvrahden.switch-off-interfaces
+  name: mvrahden/switch-off-interfaces

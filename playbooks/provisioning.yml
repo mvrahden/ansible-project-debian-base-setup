@@ -29,7 +29,7 @@
     - role: prerequisites
     - role: pip
     - role: hostname
-    - role: ssh
-    - role: switch-off-interfaces
-    - role: swapfile # homogenizes the usage of swap memory, by making use of swapfiles, instead of swap mounts
+    - role: mvrahden/ssh
+    - role: mvrahden/switch-off-interfaces
+    - role: mvrahden/swapfile
     - role: docker
