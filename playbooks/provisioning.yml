@@ -30,9 +30,6 @@
     - role: pip
     - role: hostname
     - role: ssh
-      # TODO: improve ssh hardening
-      # hardening points: https://dev-sec.io/baselines/ssh/
-      # also see: https://galaxy.ansible.com/dev-sec/ssh-hardening
     - role: switch-off-interfaces
     - role: swapfile # homogenizes the usage of swap memory, by making use of swapfiles, instead of swap mounts
     - role: docker
