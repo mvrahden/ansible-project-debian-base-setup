@@ -9,11 +9,16 @@
   register: _uses_swapfile
   ignore_errors: true
 
-- debug:
+- name: Show swapfile status
+  debug:
     msg: "Swapfile exists: {{ _uses_swapfile['stat']['exists'] }}"
 
 - name: Switch off all swaps
-  shell: swapoff -a
+  shell: swapoff -av
+  become: true
+  register: _swapoff_output
+  changed_when: false
+  failed_when: _swapoff_output['stderr'] != ''
 
 - name: Identify mounting points of swap devices
   shell: blkid | grep swap
@@ -21,18 +26,20 @@
   # -> sudo blkid | grep swap
   # -> swapon --show | grep /dev/
   become: true
-  register: mount_points
+  register: _mount_points
   ignore_errors: true
+  changed_when: 
   when: not _uses_swapfile['stat']['exists']
 
-- name: Debug mount_points
+- name: Debug _mount_points
   debug:
-    var: mount_points
+    msg: "Mount points: {{ _mount_points['stdout'] }}"
+  changed_when: false
   when: not _uses_swapfile['stat']['exists']
 
 - name: Set Fact swap_mounts
   set_fact:
-    swap_mounts: "{{ mount_points.stdout_lines | map('regex_findall', '/dev/[a-zA-Z0-9]*') | map('join') | list }}"
+    swap_mounts: "{{ _mount_points['stdout_lines'] | map('regex_findall', '/dev/[a-zA-Z0-9]*') | map('join') | list }}"
     # regex '/dev/[a-zA-Z0-9]*' searches anything starting with /dev/ and include multiple (*) of these [a-zA-Z0-9] characters
     # until a character is hit, that doesn't match with [a-zA-Z0-9], e.g. a whitespace
     # see: https://automation.ipspace.net/Example:Parsing_Text_Printouts_within_Ansible_Playbooks
@@ -47,17 +54,19 @@
   shell: umount {{ item }}
   loop: "{{ swap_mounts }}"
   ignore_errors: true
-  when: not _uses_swapfile['stat']['exists']
+  when: > 
+    not _uses_swapfile['stat']['exists']
+    and (swap_mounts|length > 0)
 
-- name: List swap space and mount points
+- name: Gather swap space and mount points information
   shell: free -mh && swapon --show
+  register: _swap_info
   when: not _uses_swapfile['stat']['exists']
 
-- name: Check if file /etc/init/zram-config.conf exists
-  stat:
-    path: /etc/init/zram-config.conf
-  register: _zram_conf
-  ignore_errors: true
+- name: Available swap space and swap mounts
+  debug:
+    msg: "{{ _swap_info['stdout'] if _swap_info['stderr'] == '' else _swap_info['stderr'] == '' }}"
+  when: not _uses_swapfile['stat']['exists']
 
 - name: Uninstall zram-conf
   apt:
@@ -66,11 +75,9 @@
     purge: yes
     autoremove: yes
     force_apt_get: yes
-  when: _zram_conf['stat']['exists']
 
 - name: Install dphys-swapfile
   apt:
     name: dphys-swapfile
     state: present
     force_apt_get: yes
-  when: not _uses_swapfile['stat']['exists']
