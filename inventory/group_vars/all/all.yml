@@ -2,4 +2,3 @@
 ssh_public_keys: "{{ vault_ssh_public_keys }}"  # list of keys (see ~/.ssh/authorized_keys)
 
 apt_cacher_cache_server: "{{ groups['targets'][0] }}" # cache master
-apt_cacher_enable_apt_caching: true

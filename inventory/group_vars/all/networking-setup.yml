@@ -1,0 +1,28 @@
+---
+group_primary_domain:
+  target: example.com
+
+networking_interfaces: [ 'eth0' ]
+
+networking_interface_profiles:
+  - type: iface
+    auto: lo
+    interface: lo
+    address_family: inet      # or inet6 or ipx
+    address_method: loopback  # or dhcp
+  - type: iface
+    auto: "{{ kube_wired_interface }}"
+    allow_hotplug: "{{ kube_wired_interface }}"
+    interface: "{{ kube_wired_interface }}"
+    address_family: inet    # or inet6 or ipx
+    address_method: static  # or dhcp
+    cidr_notation: "{{ kube_external_ip }}/24"
+    address: "{{ kube_external_ip }}"
+    netmask: 255.255.255.0  # CIDR /24
+    gateway: 192.168.1.1
+    # network: 192.168.1.0
+    # broadcast: 192.168.1.255
+    dns_nameservers:        # are there any local DNS Name Servers?
+      - 192.168.1.103
+      - 192.168.1.104
+      - 192.168.1.1

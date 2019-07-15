@@ -27,13 +27,16 @@
         autoremove: yes
   roles:
     - role: prerequisites
+    - role: mvrahden/networking-setup
+      subtasks: [ 'interfaces' ]
+      networking_domain: "{{ group_primary_domain }}"
+      networking_interface_profiles: "{{ networking_interface_profiles }}"
     - role: mvrahden/apt-cacher-ng
       apt_cacher_server: "{{ apt_cacher_cache_server | default(None) or groups['targets'][0] }}"
-      enable_apt_caching: "{{ apt_cacher_cache_server | bool }}"
+      enable_apt_caching: true
     - role: mvrahden/ntp
-    - role: pip
-    - role: hostname
     - role: mvrahden/ssh
     - role: mvrahden/switch-off-interfaces
     - role: mvrahden/swapfile
+    - role: pip
     - role: docker
