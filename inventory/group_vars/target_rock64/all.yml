@@ -1,0 +1,5 @@
+---
+# choose group-specific domains and cross-references
+
+# networking_group: target_rock64
+# networking_group_domain: rock64-super-hosts.com
