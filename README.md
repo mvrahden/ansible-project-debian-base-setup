@@ -3,10 +3,12 @@
 This provisioning helps bringing the remote debian machines (e.g. Raspberry Pis or Rock64 or other debian systems) into a homogenized state that guarantees:
 
 - accessability
-- low energy consumption from unused interfaces
+- low energy consumption
 - security.
 
-## Pre-Requirements
+## Prerequisites
+
+- install required roles: `ansible-galaxy install -r requirements.yml`
 
 ### Operating Systems
 
