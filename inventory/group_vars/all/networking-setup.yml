@@ -2,7 +2,8 @@
 group_primary_domain:
   target: example.com
 
-networking_interfaces: [ 'eth0' ]
+networking_devices_interfaces: [ 'eth0' ]
+networking_device_interface: eth0
 
 networking_interface_profiles:
   - type: iface
@@ -11,13 +12,13 @@ networking_interface_profiles:
     address_family: inet      # or inet6 or ipx
     address_method: loopback  # or dhcp
   - type: iface
-    auto: "{{ kube_wired_interface }}"
-    allow_hotplug: "{{ kube_wired_interface }}"
-    interface: "{{ kube_wired_interface }}"
+    auto: "{{ networking_interface }}"
+    allow_hotplug: "{{ networking_interface }}"
+    interface: "{{ networking_interface }}"
     address_family: inet    # or inet6 or ipx
     address_method: static  # or dhcp
-    cidr_notation: "{{ kube_external_ip }}/24"
-    address: "{{ kube_external_ip }}"
+    cidr_notation: "{{ group_host_external_ip }}/24"
+    address: "{{ group_host_external_ip }}"
     netmask: 255.255.255.0  # CIDR /24
     gateway: 192.168.1.1
     # network: 192.168.1.0
@@ -26,3 +27,6 @@ networking_interface_profiles:
       - 192.168.1.103
       - 192.168.1.104
       - 192.168.1.1
+
+
+group_host_external_ip: "{{ kube_subnet }}.{{ group_host_external_ip[inventory_hostname] | default(None) or hostvars[inventory_hostname]['ansible_' + networking_interface ]['ipv4']['address'].split('.')[3] }}"
