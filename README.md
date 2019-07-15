@@ -3,8 +3,11 @@
 This provisioning helps bringing the remote debian machines (e.g. Raspberry Pis or Rock64 or other debian systems) into a homogenized state that guarantees:
 
 - accessability
-- low energy consumption
-- security.
+- low energy consumption (interface shutdown)
+- security
+- synchronicity
+- package management bandwitdth efficiency
+- swapfile-based memory management.
 
 ## Prerequisites
 
