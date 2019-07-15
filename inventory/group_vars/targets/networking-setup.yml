@@ -5,28 +5,28 @@ group_primary_domain:
 networking_device_interfaces: [ 'eth0' ]
 networking_device_interface: eth0
 
+# see manpage interfaces(5)
 networking_interface_profiles:
+  # loopback device
   - type: iface
     auto: lo
     interface: lo
     address_family: inet      # or inet6 or ipx
     address_method: loopback  # or dhcp
+  # eth0 static profile
   - type: iface
-    auto: "{{ networking_interface }}"
-    allow_hotplug: "{{ networking_interface }}"
-    interface: "{{ networking_interface }}"
+    auto: "{{ networking_device_interface }}"
+    allow_hotplug: "{{ networking_device_interface }}"
+    interface: "{{ networking_device_interface }}"
     address_family: inet    # or inet6 or ipx
     address_method: static  # or dhcp
-    cidr_notation: "{{ group_host_external_ip }}/24"
-    address: "{{ group_host_external_ip }}"
+    cidr_notation: "{{ group_host_static_ip }}/24"
+    address: "{{ group_host_static_ip }}"
     netmask: 255.255.255.0  # CIDR /24
     gateway: 192.168.1.1
     # network: 192.168.1.0
     # broadcast: 192.168.1.255
-    dns_nameservers:        # are there any local DNS Name Servers?
+    dns_nameservers: # are there any local DNS Name Servers?
       - 192.168.1.103
       - 192.168.1.104
       - 192.168.1.1
-
-
-group_host_external_ip: "{{ kube_subnet }}.{{ group_host_external_ip[inventory_hostname] | default(None) or hostvars[inventory_hostname]['ansible_' + networking_interface ]['ipv4']['address'].split('.')[3] }}"
