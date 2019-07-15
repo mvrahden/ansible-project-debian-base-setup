@@ -3,5 +3,5 @@
   name: mvrahden/ssh
 - src: mvrahden.swapfile
   name: mvrahden/swapfile
-- src: mvrahden.switch-off-interfaces
+- src: mvrahden.switch_off_interfaces
   name: mvrahden/switch-off-interfaces
