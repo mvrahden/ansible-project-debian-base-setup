@@ -18,5 +18,5 @@
     - role: prerequisites
     - role: mvrahden/networking-setup
       subtasks: [ 'interfaces' ]
-      networking_device_interfaces: "{{ networking_device_interfaces }}"
-      networking_interface_profiles: "{{ networking_interface_profiles }}"
+      networking_device_interfaces: "{{ _networking_device_interfaces }}"
+      networking_interface_profiles: "{{ _networking_interface_profiles }}"

@@ -14,10 +14,12 @@
         autoclean: yes
         autoremove: yes
 
-    - role: networking-setup
+  roles:
+    - role: mvrahden/networking-setup
       subtasks: [ 'hostname' ]
-      networking_domain: "{{ group_primary_domain }}"
-      networking_device_interfaces: "{{ networking_interfaces }}"
+      networking_group: "{{ _networking_group }}"
+      networking_group_domain: "{{ _networking_group_domain }}"
+      networking_device_interfaces: "{{ _networking_device_interfaces }}"
     - role: mvrahden/apt-cacher-ng
       apt_cacher_server: "{{ apt_cacher_cache_server | default(None) or groups['targets'][0] }}"
       enable_apt_caching: true
