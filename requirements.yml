@@ -5,3 +5,7 @@
   name: mvrahden/swapfile
 - src: mvrahden.switch_off_interfaces
   name: mvrahden/switch-off-interfaces
+- src: mvrahden.apt_cacher_ng
+  name: mvrahden/apt-cacher-ng
+- src: https://github.com/mrlesmithjr/ansible-ntp.git
+  name: mvrahden/ntp
