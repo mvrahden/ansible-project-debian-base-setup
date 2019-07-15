@@ -1,24 +1,27 @@
 ---
 group_subnet: 192.168.1
 
+ansible_host: "{{ group_host_static_ip }}"
+
+
 # static target IP endings per host
 # important for bootstrapping the network configuration
 group_host_ip_ending:
-  kube-r64-000: 200
-  kube-r64-001: 201
-  kube-r64-002: 202
-  kube-r64-003: 203
-  kube-r64-004: 204
-  kube-r64-005: 205
-  kube-r64-006: 206
-  kube-r64-007: 207
-  kube-rpi-000: 150
-  kube-rpi-001: 151
-  kube-rpi-002: 152
-  kube-rpi-003: 153
-  kube-rpi-004: 154
-  kube-rpi-005: 155
-  kube-rpi-006: 156
-  kube-rpi-007: 157
+  rock64-host-00: 200
+  rock64-host-01: 201
+  rock64-host-02: 202
+  rock64-host-03: 203
+  rock64-host-04: 204
+  rock64-host-05: 205
+  rock64-host-06: 206
+  rock64-host-07: 207
+  pi-host-00: 150
+  pi-host-01: 151
+  pi-host-02: 152
+  pi-host-03: 153
+  pi-host-04: 154
+  pi-host-05: 155
+  pi-host-06: 156
+  pi-host-07: 157
 
 group_host_static_ip: "{{ group_subnet }}.{{ group_host_ip_ending[inventory_hostname] | default(None) or hostvars[inventory_hostname]['ansible_' + networking_device_interface ]['ipv4']['address'].split('.')[3] }}"
