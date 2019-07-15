@@ -2,7 +2,7 @@
 group_primary_domain:
   target: example.com
 
-networking_device_interfaces: [ 'eth0' ]
+networking_device_interfaces: [ 'eth0' ]  # all networking devices
 networking_device_interface: eth0
 
 # see manpage interfaces(5)
