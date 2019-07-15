@@ -23,9 +23,9 @@
     force_apt_get: yes
   become: true
 
-- name: apt-get install man
+- name: apt-get install 'man', 'vim' and 'nano' packages
   apt:
-    name: [ 'man' ]
+    name: [ 'man', 'vim', 'nano' ]
     state: present
     force: yes
   become: true
