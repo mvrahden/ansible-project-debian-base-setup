@@ -7,7 +7,7 @@
     and not inventory_hostname == ansible_hostname
   register: _hostname
 
-- name: Ensure all devices are listed in /etc/hosts
+- name: Template /etc/hosts file
   template:
     src: hosts.j2
     dest: /etc/hosts
@@ -19,7 +19,10 @@
   shell: sleep 5 && reboot
   async: 1
   poll: 0
-  when: _hostname['changed'] or _hostsfile['changed']
+  changed_when: false
+  when: >
+    _hostname['changed']
+    or _hostsfile['changed']
 
 - name: Wait for Reboot
   wait_for_connection:
@@ -27,4 +30,6 @@
     sleep: 5
     delay: 5
     timeout: 180
-  when: _hostname['changed'] or _hostsfile['changed']
+  when: >
+    _hostname['changed']
+    or _hostsfile['changed']
