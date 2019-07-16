@@ -1,0 +1,5 @@
+---
+# set first host from 'targets', else fallback to first host of 'all'
+apt_cacher_server: "{{ groups['targets'][0] | default(None) or groups['all'][0] }}" # cache master
+
+enable_apt_caching: true

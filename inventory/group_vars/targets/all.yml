@@ -1,16 +1,10 @@
 ---
-group_subnet: 192.168.1
+ansible_host: "{{ host_static_ip }}"
 
-ansible_host: "{{ group_host_static_ip }}"
-
-# Define group variables here for all targets;
-# or in group var files, to separate between groups
-_networking_group: targets
-_networking_group_domain: example.com
-
+_group_subnet: 192.168.1
 # static target IP endings per host
 # important for bootstrapping the network configuration
-group_host_ip_ending:
+_group_host_ip_ending:
   rock64-host-00: 200
   rock64-host-01: 201
   rock64-host-02: 202
@@ -28,4 +22,5 @@ group_host_ip_ending:
   pi-host-06: 156
   pi-host-07: 157
 
-group_host_static_ip: "{{ group_subnet }}.{{ group_host_ip_ending[inventory_hostname] | default(None) or hostvars[inventory_hostname]['ansible_' + networking_device_interface ]['ipv4']['address'].split('.')[3] }}"
+# Assemble static_ip from group_subnet and group_host_ip_ending
+host_static_ip: "{{ _group_subnet }}.{{ _group_host_ip_ending[inventory_hostname] }}"

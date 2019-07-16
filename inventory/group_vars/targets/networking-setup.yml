@@ -1,32 +1,34 @@
 ---
-group_primary_domain:
-  target: example.com
+# Define group variables here for all targets;
+# or in group var files, to separate between groups
+networking_group: targets
+networking_group_domain: example.com
 
-_networking_device_interfaces: [ 'eth0' ]  # all networking devices
-networking_device_interface: eth0
+networking_device_interfaces: [ 'eth0' ]  # all networking devices
+
+_networking_loopback_interface: lo
+_networking_wired_interface: eth0
 
 # see manpage interfaces(5)
-_networking_interface_profiles:
+networking_interface_profiles:
   # loopback device
   - type: iface
-    auto: lo
-    interface: lo
+    auto: "{{ _networking_loopback_interface }}"
+    interface: "{{ _networking_loopback_interface }}"
     address_family: inet      # or inet6 or ipx
     address_method: loopback  # or dhcp
   # eth0 static profile
   - type: iface
-    auto: "{{ networking_device_interface }}"
-    allow_hotplug: "{{ networking_device_interface }}"
-    interface: "{{ networking_device_interface }}"
+    auto: "{{ _networking_wired_interface }}"
+    allow_hotplug: "{{ _networking_wired_interface }}"
+    interface: "{{ _networking_wired_interface }}"
     address_family: inet    # or inet6 or ipx
     address_method: static  # or dhcp
-    cidr_notation: "{{ group_host_static_ip }}/24"
-    address: "{{ group_host_static_ip }}"
+    cidr_notation: "{{ host_static_ip }}/24"
+    address: "{{ host_static_ip }}"
     netmask: 255.255.255.0  # CIDR /24
     gateway: 192.168.1.1
     # network: 192.168.1.0
     # broadcast: 192.168.1.255
     dns_nameservers: # are there any local DNS Name Servers?
-      - 192.168.1.103
-      - 192.168.1.104
       - 192.168.1.1
