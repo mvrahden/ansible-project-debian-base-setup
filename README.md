@@ -1,4 +1,4 @@
-# Debian Base Setup
+# Debian Base Setup <!-- omit in toc -->
 
 This provisioning helps bringing the remote debian machines (e.g. Raspberry Pis or Rock64 or other debian systems) into a homogenized state that guarantees:
 
@@ -8,6 +8,17 @@ This provisioning helps bringing the remote debian machines (e.g. Raspberry Pis 
 - synchronicity
 - package management bandwitdth efficiency
 - swapfile-based memory management.
+
+## Table of Contents <!-- omit in toc -->
+
+- [Prerequisites](#Prerequisites)
+  - [Operating Systems](#Operating-Systems)
+  - [SSH](#SSH)
+- [How to de-/encrypt a vault-file](#How-to-de-encrypt-a-vault-file)
+- [How to use this Ansible playbook bundle](#How-to-use-this-Ansible-playbook-bundle)
+- [OS Versions tested](#OS-Versions-tested)
+- [License](#License)
+- [Author Information](#Author-Information)
 
 ## Prerequisites
 
@@ -24,7 +35,7 @@ The following list is just an exemplary collection of debian-based operating sys
 Feel free to try other **debian-based** systems – in principle nothing can go wrong, as long as you try it on a device that:
 
 - has no sensible data and
-- is physically accessible to you.
+- is ideally physically accessible to you.
 
 ### SSH
 
