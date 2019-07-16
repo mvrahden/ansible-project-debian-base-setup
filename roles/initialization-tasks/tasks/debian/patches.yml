@@ -1,0 +1,22 @@
+---
+# patches outdated dhcpcd version with IAID problems
+
+- name: Check dhcpcd version
+  shell: 'dhcpcd --version | grep dhcpcd'
+  become: true
+  register: _current_version_output
+  changed_when: false
+
+- name: Current dhcpcd version
+  debug:
+    # reduce by 'dhcpcd ' substring and keep pure version number
+    msg: "{{ _current_version_output['stdout'].split(' ')[1] }}"
+  register: _current_version
+  changed_when: false
+
+- name: Build and install dhcpcd {{ _dhcpcd_min_target_version }}
+  include: patches/update-dhcpcd.yml
+  vars:
+    _target_version: "{{ _dhcpcd_min_target_version }}"
+    _archive_root_directory: dhcpcd-dhcpcd-{{ _dhcpcd_min_target_version }}
+  when: _target_version is version_compare(_current_version['msg'], '<')

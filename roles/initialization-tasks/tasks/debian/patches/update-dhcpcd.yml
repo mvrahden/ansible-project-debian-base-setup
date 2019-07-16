@@ -1,0 +1,46 @@
+---
+# patches outdated dhcpcd version with IAID problems
+# assumes that version comparison has been done already
+
+# dhcpcd --version
+- name: create empty directory
+  file:
+    path: "{{ item }}"
+    mode: 0755
+    state: directory
+  with_items:
+    - /tmp/dhcpcd       # build directory
+    - /var/lib/dhcpcd   # configuration directory
+
+- name: Download new version 7 of dhcpcd, and substitute massively outdated native version
+  get_url:
+    # see: https://github.com/rsmarples/dhcpcd/releases
+    url: https://github.com/rsmarples/dhcpcd/archive/dhcpcd-{{ _target_version }}.tar.gz
+    dest: /tmp/dhcpcd/dhcpcd.tar.gz
+
+- name: Unpack
+  unarchive:
+    remote_src: true
+    src: /tmp/dhcpcd/dhcpcd.tar.gz
+    dest: /tmp/dhcpcd/
+
+- name: Configure make
+  shell: ./configure --libexecdir=/lib/dhcpcd --dbdir=/var/lib/dhcpcd
+  args:
+    chdir: /tmp/dhcpcd/{{ _archive_root_directory }}/
+
+- name: Build the default target
+  make:
+    chdir: /tmp/dhcpcd/{{ _archive_root_directory }}/
+
+- name: Run 'install' target as root
+  make:
+    chdir: /tmp/dhcpcd/{{ _archive_root_directory }}/
+    target: install
+  become: true
+
+- name: Remove temporary resources and directories
+  shell: rm -rf {{ item }}
+  become: true
+  with_items:
+    - /tmp/dhcpcd  # build directory

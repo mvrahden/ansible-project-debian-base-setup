@@ -32,4 +32,14 @@
     name: [ 'man', 'vim', 'nano' ]
     state: present
     force: yes
+    force_apt_get: yes
   become: true
+
+- name: apt-get install additional packages
+  apt:
+    name: "{{ _additional_packages }}"
+    state: present
+    force: yes
+    force_apt_get: yes
+  become: true
+  when: (_additional_packages | list | length > 0)

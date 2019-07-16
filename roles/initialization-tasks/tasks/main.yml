@@ -1,0 +1,28 @@
+---
+- name: Register raspbian distribution
+  # see: https://raspberrypi.stackexchange.com/questions/6974/how-can-i-determine-which-os-image-i-am-running#40826
+  shell: cat /etc/os-release | grep ID=raspbian
+  when: ansible_os_family == "Debian"
+  ignore_errors: true
+  register: _os_release_id
+  changed_when: false
+  failed_when: false
+
+- name: Set _os_is_raspbian according to findings in prior task
+  set_fact: 
+    _os_is_raspbian: "{{ _os_release_id['stdout'] | regex_findall('raspbian') | list | length > 0 }}"
+
+- debug:
+    var: _os_is_raspbian
+
+- name: Update Package Management
+  include: debian/package-management.yml
+  vars:
+    _additional_packages: "{{ additional_packages }}"
+  when: ansible_os_family == "Debian"
+
+- name: Apply Patches
+  include: debian/patches.yml
+  vars:
+    _dhcpcd_min_target_version: '7.2.2'
+  when: ansible_os_family == "Debian"
