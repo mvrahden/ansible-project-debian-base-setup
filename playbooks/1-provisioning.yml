@@ -16,5 +16,6 @@
 
   roles:
     - role: initialization-tasks
+      tags: [ initialize ]
     - role: mvrahden/networking-setup
-      subtasks: [ 'interfaces' ]
+      subtasks: [ interfaces ]

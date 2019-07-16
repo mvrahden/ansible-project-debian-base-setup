@@ -23,7 +23,7 @@
 
   roles:
     - role: mvrahden/networking-setup
-      subtasks: [ 'hostname' ]
+      subtasks: [ hostname ]
     - role: mvrahden/apt-cacher-ng
     - role: mvrahden/ntp
     - role: mvrahden/ssh
