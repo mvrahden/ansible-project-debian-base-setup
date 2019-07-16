@@ -9,7 +9,7 @@
   failed_when: false
 
 - name: Set _os_is_raspbian according to findings in prior task
-  set_fact: 
+  set_fact:
     _os_is_raspbian: "{{ _os_release_id['stdout'] | regex_findall('raspbian') | list | length > 0 }}"
 
 - debug:

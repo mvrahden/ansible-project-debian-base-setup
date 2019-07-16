@@ -22,8 +22,8 @@
   apt:
     name: "{{ docker_pre_requisites }}"
     state: present
-    force: yes
-    force_apt_get: yes
+    force: true
+    force_apt_get: true
   when: not _docker_binary['stat']['exists']
 
 - name: Add docker ({{ os_distro }}) repository key to apt
@@ -47,17 +47,17 @@
 
 - name: apt-get update
   apt:
-    update_cache: yes
-    autoclean: yes
-    autoremove: yes
-    force_apt_get: yes
+    update_cache: true
+    autoclean: true
+    autoremove: true
+    force_apt_get: true
   when: not _docker_binary['stat']['exists']
   
 - name: Install docker {{ docker_package_name }}
   apt:
     name: "{{ docker_package_name }}"
     state: present
-    force_apt_get: yes
+    force_apt_get: true
   become: true
   ignore_errors: true # check errors in subsequent tasks
   register: _docker_install_status

@@ -1,45 +1,45 @@
 ---
 - name: apt-get update
   apt:
-    update_cache: yes
-    autoclean: yes
-    autoremove: yes
+    update_cache: true
+    autoclean: true
+    autoremove: true
     cache_valid_time: 86400
-    force: yes
-    force_apt_get: yes
+    force: true
+    force_apt_get: true
   become: true
 
 - name: apt-get upgrade
   apt:
     upgrade: full
-    autoclean: yes
-    autoremove: yes
-    force: yes
-    force_apt_get: yes
+    autoclean: true
+    autoremove: true
+    force: true
+    force_apt_get: true
   become: true
 
 - name: apt-get dist-upgrade
   apt:
     upgrade: dist
-    autoclean: yes
-    autoremove: yes
-    force: yes
-    force_apt_get: yes
+    autoclean: true
+    autoremove: true
+    force: true
+    force_apt_get: true
   become: true
 
 - name: apt-get install 'man', 'vim' and 'nano' packages
   apt:
     name: [ 'man', 'vim', 'nano' ]
     state: present
-    force: yes
-    force_apt_get: yes
+    force: true
+    force_apt_get: true
   become: true
 
 - name: apt-get install additional packages
   apt:
     name: "{{ _additional_packages }}"
     state: present
-    force: yes
-    force_apt_get: yes
+    force: true
+    force_apt_get: true
   become: true
   when: (_additional_packages | list | length > 0)

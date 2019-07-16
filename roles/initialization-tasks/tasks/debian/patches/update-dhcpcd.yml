@@ -25,7 +25,7 @@
     dest: /tmp/dhcpcd/
 
 - name: Configure make
-  shell: ./configure --libexecdir=/lib/dhcpcd --dbdir=/var/lib/dhcpcd
+  command: ./configure --libexecdir=/lib/dhcpcd --dbdir=/var/lib/dhcpcd
   args:
     chdir: /tmp/dhcpcd/{{ _archive_root_directory }}/
 
@@ -40,7 +40,7 @@
   become: true
 
 - name: Remove temporary resources and directories
-  shell: rm -rf {{ item }}
+  file:
+    path: /tmp/dhcpcd
+    state: absent
   become: true
-  with_items:
-    - /tmp/dhcpcd  # build directory

@@ -8,7 +8,7 @@
       with_items:
         - "{{ ansible_hostname }} | {{ inventory_hostname }} | {{ inventory_hostname_short }} | {{ ansible_host }}"
         - "{{ os_family }} | {{ os_distro }} | {{ os_codename }} | {{ target_node_arch }}"
-  
+
   post_tasks:
     - name: Next steps
       debug:

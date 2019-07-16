@@ -3,7 +3,7 @@
   apt:
     name: "{{ pip_python_packages }}"
     state: present
-    force: yes
+    force: true
   become: true
 
 # If Docker-compose fails in 'aarch64'
@@ -13,7 +13,7 @@
   apt:
     name: "{{ pip_build_packages }}"
     state: present
-    force: yes
+    force: true
   become: true
 
 - name: Install virtualenv and setuptools
