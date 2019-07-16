@@ -4,6 +4,7 @@
     autoclean: yes
     autoremove: yes
     cache_valid_time: 86400
+    force: yes
     force_apt_get: yes
   become: true
 
@@ -12,6 +13,7 @@
     upgrade: full
     autoclean: yes
     autoremove: yes
+    force: yes
     force_apt_get: yes
   become: true
 
@@ -20,6 +22,7 @@
     upgrade: dist
     autoclean: yes
     autoremove: yes
+    force: yes
     force_apt_get: yes
   become: true
 
