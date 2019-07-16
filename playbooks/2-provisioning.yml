@@ -2,6 +2,13 @@
 - name: Setup all hosts with the following roles
   hosts: targets
   pre_tasks:
+    - name: Wait for successful connection
+      wait_for_connection:
+        connect_timeout: 20
+        sleep: 5
+        delay: 5
+        timeout: 180
+
     - name: Output general host and OS details
       debug:
         msg: "{{ item }}"
