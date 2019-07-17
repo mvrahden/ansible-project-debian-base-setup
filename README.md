@@ -26,7 +26,7 @@ This provisioning helps bringing the remote debian machines (e.g. Raspberry Pis 
 
 ### Operating Systems
 
-The following list is just an exemplary collection of debian-based operating systems that have been [tested with this playbook](#os-versions-tested).
+The following list is just an exemplary collection of debian-based operating systems that have been [tested with this playbook](#OS-Versions-tested).
 
 - Ubuntu Server (http://cdimage.ubuntu.com/releases/) or Debian (https://www.debian.org/releases/stable/)
 - Debain (Ayufan Rock64 Build) for Rock64 (https://github.com/ayufan-rock64/linux-build/ or http://wiki.pine64.org/index.php/ROCK64_Main_Page)
@@ -68,12 +68,25 @@ To protect sensible data from being unintendedly exposed to unauthorized third p
    `ansible-vault encrypt inventory/group_vars/all/vault.yml` (assuming your command line is on project root).
 5. To decrypt the file use `decrypt` instead of `encrypt`.
 
-## How to use this Ansible playbook
+## How to use this Ansible playbook bundle
 
-After all the inventory and variable and vault-files under `inventory/group_vars/all` have been examined and changed accordingly, execute the following command:
+The playbook bundle currently consists of **two (three) consecutively played playbooks**:
+
+> It is intended to merge these playbooks by making use of dynamic inventories.
+> The current workaround is to have three consecutive playbooks.
+
+- `playbooks/0-python-base.yml` – **optional**; Should the hosts lack a python installation you can play this playbook.
+- `playbooks/1-provisioning.yml` – **required**; Connects to the hosts defined in `hosts.throwaway.ini` (a temporary inventory) and allocates a static IP to each individual host.
+  After this play, hosts will be accessible with their new static IP, manually defined under the groups **variable**-file, e.g. `group_vars/targets/all.yml`.
+- `playbooks/2-provisioning.yml` – **required**; This playbook plays the actual homogenization tasks onto the hosts.
+  It has to be played with the actual inventory `hosts.ini`.
+
+After both inventories and all variable and vault-files under `inventory/group_vars/` have been examined and changed accordingly, execute the following commands consecutively:
 
 ```bash
-ansible-playbook playbooks/provisioning.yml -k
+ansible-playbook -i inventory/hosts.throwaway.ini playbooks/0-python-base.yml -k
+ansible-playbook -i inventory/hosts.throwaway.ini playbooks/1-provisioning.yml -k
+ansible-playbook playbooks/2-provisioning.yml -k
 ```
 
 You'll be prompted for your **ssh passphrase** and the process beginns.
@@ -84,6 +97,10 @@ For issues with Ansible or the connection, please consult an online search engin
 This is a list of OS Versions that have been tested.
 Feel free to add other Versions after successful runs.
 
+- Ubuntu Server
+  - Bionic | 18.04
+  - Cosmic | not yet
+  - Disco | not yet
 - Raspbian Lite
   - Stretch | Nov 2019
   - Buster | Jun 2019
