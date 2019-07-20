@@ -4,8 +4,6 @@
 networking_group: targets
 networking_group_domain: example.com
 
-networking_device_interfaces: [ 'eth0' ]  # all networking devices
-
 _networking_loopback_interface: lo
 _networking_wired_interface: eth0
 
