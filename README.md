@@ -35,7 +35,8 @@ The following list is just an exemplary collection of debian-based operating sys
 Feel free to try other **debian-based** systems – in principle nothing can go wrong, as long as you try it on a device that:
 
 - has no sensible data and
-- is ideally physically accessible to you.
+- is ideally physically accessible to you,
+- otherwise please take precautionary measures, e.g. as documented [here](http://www.gnu.org/software/grub/manual/legacy/grub.html#Making-your-system-robust).
 
 ### SSH
 
@@ -49,7 +50,7 @@ To achieve that, please execute from your local control machine for every host i
 Make sure to repeat this process for **every** machine.
 After this process is done, have a look at `inventory/hosts.ini`-file and verify the entries.
 
-After this step, the remote machines are almost ready to be provisioned by Ansible.
+After this step, the remote machines are **almost** ready to be provisioned by Ansible.
 We just need to set our variables accordingly, namely our public ssh-keys.
 
 For this create a file `inventory/group_vars/all/vault.yml` and paste your public key/s (get it e.g. via `cat ~/.ssh/id_rsa.pub`) into this file.
@@ -70,23 +71,17 @@ To protect sensible data from being unintendedly exposed to unauthorized third p
 
 ## How to use this Ansible playbook bundle
 
-The playbook bundle currently consists of **two (three) consecutively played playbooks**:
+The playbook bundle consists of one primary **playbook**, divided in three plays:
 
-> It is intended to merge these playbooks by making use of dynamic inventories.
-> The current workaround is to have three consecutive playbooks.
+- The first play ensures, that a python package exists on the hosts, in order to play Ansible plays.
+- The second play connects to the hosts defined in `inventory/hosts.ini` (an initial inventory), updates the systems packages and allocates a static IP to each individual host. In the `inventory/hosts.ini`-file you can define the static IPs to be allocated with the `host_static_ip` variable. The other variable `ansible_host` is the **currently** negotiated IP.
+  After this play, hosts will be accessible with their freshly allocated static IPs.
+- The third play inhibits the actual homogenization tasks and provisions them onto the hosts.
 
-- `playbooks/0-python-base.yml` – **optional**; Should the hosts lack a python installation you can play this playbook.
-- `playbooks/1-provisioning.yml` – **required**; Connects to the hosts defined in `hosts.throwaway.ini` (a temporary inventory) and allocates a static IP to each individual host.
-  After this play, hosts will be accessible with their new static IP, manually defined under the groups **variable**-file, e.g. `group_vars/targets/all.yml`.
-- `playbooks/2-provisioning.yml` – **required**; This playbook plays the actual homogenization tasks onto the hosts.
-  It has to be played with the actual inventory `hosts.ini`.
-
-After both inventories and all variable and vault-files under `inventory/group_vars/` have been examined and changed accordingly, execute the following commands consecutively:
+After inventory and all variable and vault-files under `inventory/group_vars/` have been examined carefully and changed accordingly, execute the following command:
 
 ```bash
-ansible-playbook -i inventory/hosts.throwaway.ini playbooks/0-python-base.yml -k
-ansible-playbook -i inventory/hosts.throwaway.ini playbooks/1-provisioning.yml -k
-ansible-playbook playbooks/2-provisioning.yml -k
+ansible-playbook playbooks/provisioning.yml -k
 ```
 
 You'll be prompted for your **ssh passphrase** and the process beginns.
@@ -97,10 +92,6 @@ For issues with Ansible or the connection, please consult an online search engin
 This is a list of OS Versions that have been tested.
 Feel free to add other Versions after successful runs.
 
-- Ubuntu Server
-  - Bionic | 18.04
-  - Cosmic | not yet
-  - Disco | not yet
 - Raspbian Lite
   - Stretch | Nov 2019
   - Buster | Jun 2019
