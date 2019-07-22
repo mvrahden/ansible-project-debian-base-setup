@@ -29,10 +29,6 @@
           {{ os_family }} | {{ os_distro }} | {{ os_codename }} | {{ target_node_arch }}"
 
   post_tasks:
-    - name: Reboot devices (and negotiate new networking profiles)
-      shell: sleep 5 && reboot
-      async: 1
-      poll: 0
     - name: Create in-memory inventory for new 'static_targets' group with hosts with new static ips
       # only runs once for all the hosts in the play; see: https://docs.ansible.com/ansible/2.5/modules/add_host_module.html
       add_host:
@@ -50,11 +46,10 @@
       when: inventory_hostname == groups['targets'][0]
 
   roles:
-    # - role: initialization-tasks
-    #   tags: [ initialize ]
+    - role: initialization-tasks
+      tags: [ initialize ]
     - role: mvrahden/networking-setup
       subtasks: [ interfaces ]
-      perform_reboot: false
 
 - name: Test
   hosts: static_targets
