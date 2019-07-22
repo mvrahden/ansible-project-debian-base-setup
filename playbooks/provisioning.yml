@@ -77,6 +77,16 @@
       changed_when: false
       no_log: true
       failed_when: networking_group_domain not in _hostsfile['stdout']
+    - name: Reboot and continue
+      shell: sleep 5 && reboot
+      async: 1
+      poll: 0
+    - name: Wait for Reboot
+      wait_for_connection:
+        connect_timeout: 20
+        sleep: 5
+        delay: 5
+        timeout: 300
     - name: Output /etc/hosts-file content
       debug:
         msg: _hostsfile['stdout']
@@ -88,6 +98,7 @@
   roles:
     - role: mvrahden/networking-setup
       subtasks: [ hostname ]
+      perform_reboot: false
       networking_group_name: static_targets  # inventory group
     - role: mvrahden/apt-cacher-ng
     - role: mvrahden/ntp
