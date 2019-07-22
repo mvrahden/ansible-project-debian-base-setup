@@ -1,5 +1,4 @@
 ---
----
 - name: Install python before doing any other steps
   hosts: all
   become: yes
@@ -77,11 +76,15 @@
           {{ inventory_hostname }} | {{ inventory_hostname_short }} | 
           {{ os_family }} | {{ os_distro }} | {{ os_codename }} | {{ target_node_arch }}"
   post_tasks:
-    - name: Output general host and OS details
+    - name: Gather general host and OS details
       command: cat /etc/hosts
       register: _hostsfile
       changed_when: false
+      no_log: true
       failed_when: networking_group_domain not in _hostsfile['stdout']
+    - name: Output /etc/hosts-file content
+      debug:
+        msg: _hostsfile['stdout']
     - name: "'Done' message"
       debug:
         msg: "The playbook has successfully been executed. Your machines are ready for some action now!"
