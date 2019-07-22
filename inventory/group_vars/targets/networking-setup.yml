@@ -1,7 +1,6 @@
 ---
 # Define group variables here for all targets;
 # or in group var files, to separate between groups
-networking_group: targets
 networking_group_domain: example.com
 
 _networking_loopback_interface: lo
