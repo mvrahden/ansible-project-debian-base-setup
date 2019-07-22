@@ -39,6 +39,7 @@
         ansible_host: "{{ hostvars[ item ]['host_static_ip'] }}"
         ansible_user: "{{ hostvars[ item ]['ansible_user'] }}"
         ansible_become_pass: "{{ hostvars[ item ]['ansible_become_pass'] }}"
+        host_static_ip: "{{ hostvars[ item ]['host_static_ip'] }}"  # control variable
       with_items: "{{ groups['targets'] }}"
     - name: Next steps
       debug:
@@ -61,15 +62,21 @@
         sleep: 5
         delay: 5
         timeout: 300
-    - debug: msg=ansible_[{{ networking_interface_profiles | map(attribute='interface') | difference([ 'lo' ]) | list | join('|') }}]
     - name: Gathering facts
       setup:
-        filter: ansible_eth0
-    - debug:
+        gather_subset: network # gather fresh facts manually
+    # - debug:
+    #     msg: >
+    #       "{{ ansible_hostname }} | {{ ansible_host }} | {{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }} | {{ ansible_user }} | {{ ansible_become_pass }} | 
+    #       {{ inventory_hostname }} | {{ inventory_hostname_short }} | 
+    #       {{ os_family }} | {{ os_distro }} | {{ os_codename }} | {{ target_node_arch }}"
+    - name: Sanity check IP allocation
+      debug:
         msg: >
-          "{{ ansible_hostname }} | {{ ansible_host }} | {{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }} | {{ ansible_user }} | {{ ansible_become_pass }} | 
-          {{ inventory_hostname }} | {{ inventory_hostname_short }} | 
-          {{ os_family }} | {{ os_distro }} | {{ os_codename }} | {{ target_node_arch }}"
+          "Networking: Interfaces have been set properly. Currently allocated IP should be {{ host_static_ip }}."
+      failed_when: >
+        not (host_static_ip == ansible_host)
+        or not (ansible_host == hostvars[ inventory_hostname ]['ansible_eth0']['ipv4']['address'])
   post_tasks:
     - name: Gather general host and OS details
       command: cat /etc/hosts
